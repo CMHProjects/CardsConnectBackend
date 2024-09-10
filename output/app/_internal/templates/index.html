@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SIM Card Data</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f9fa;
+        margin: 0;
+        padding: 20px 100px;
+      }
+
+      h2 {
+        color: #343a40;
+      }
+
+      button {
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 10px 0;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+
+      .get-numbers-btn {
+        background-color: #007bff;
+      }
+
+      .get-numbers-btn:hover {
+        background-color: #0056b3;
+      }
+
+      .reset-data-btn {
+        background-color: #dc3545;
+      }
+
+      .reset-data-btn:hover {
+        background-color: #c82333;
+      }
+
+      .loader {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #3498db;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        animation: spin 1s linear infinite;
+        display: none;
+        margin-left: 10px;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+      }
+
+      th,
+      td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+
+      th {
+        background-color: #007bff;
+        color: white;
+      }
+
+      tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
+
+      tr:hover {
+        background-color: #e9ecef;
+      }
+
+      /* Modal Styles */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgb(0, 0, 0);
+        background-color: rgba(0, 0, 0, 0.4);
+        padding-top: 60px;
+      }
+
+      .modal-content {
+        background-color: #fefefe;
+        margin: 5% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+      }
+
+      .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+      }
+
+      .close:hover,
+      .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      /* Busy Button State */
+      .btn-busy {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h2><i class="fas fa-sim-card"></i> SIM Card Data</h2>
+    <button class="get-numbers-btn" onclick="getNumbers()">
+      <i class="fas fa-download"></i> Get Numbers
+    </button>
+    <button class="reset-data-btn" onclick="resetData()">
+      <i class="fas fa-trash-alt"></i> Reset Data
+    </button>
+    <div class="loader" id="loader"></div>
+
+    <table id="simData">
+      <thead>
+        <tr>
+          <th>Port</th>
+          <th>ICCID</th>
+          <th>MSISDN</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Table rows will be dynamically added here -->
+      </tbody>
+    </table>
+
+    <!-- Modal for SIM card data -->
+    <div id="simModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <div id="simDetails"></div>
+      </div>
+    </div>
+
+    <script>
+      function getNumbers() {
+        document.getElementById("loader").style.display = "inline-block";
+
+        $.ajax({
+          url: "/run_main_and_get_data",
+          type: "GET",
+          success: function (response) {
+            console.log(response);
+            document.getElementById("loader").style.display = "none";
+
+            // Clear sims data
+            var tableBody = document
+              .getElementById("simData")
+              .getElementsByTagName("tbody")[0];
+            tableBody.innerHTML = "";
+
+            // Add new data rows
+            response.forEach(function (data) {
+              var row = tableBody.insertRow();
+              var cellPort = row.insertCell(0);
+              var cellICCID = row.insertCell(1);
+              var cellMSISDN = row.insertCell(2);
+              var cellAction = row.insertCell(3);
+
+              cellPort.innerHTML = data.port;
+              cellICCID.innerHTML = data.responses.ICCID;
+              cellMSISDN.innerHTML = data.responses.MSISDN;
+
+              // Create unique id for each button based on port
+              var btnId = `getSimDataBtn_${data.port}`;
+
+              // Add button with unique id and onclick event
+              cellAction.innerHTML = `<button id="${btnId}" class="get-numbers-btn" onclick="getCardData('${data.port}')"><i class="fas fa-search"></i> Get SIM Data</button>`;
+            });
+          },
+          error: function (error) {
+            console.log(error);
+            document.getElementById("loader").style.display = "none";
+          },
+        });
+      }
+
+      function resetData() {
+        $.ajax({
+          url: "/reset_data",
+          type: "POST",
+          success: function (response) {
+            console.log(response);
+          },
+          error: function (error) {
+            console.log(error);
+          },
+        });
+      }
+
+      function getCardData(port) {
+        var btn = document.getElementById(`getSimDataBtn_${port}`);
+
+        // Disable the button and change text to indicate processing
+        btn.disabled = true;
+        btn.classList.add("btn-busy");
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Busy...';
+
+        $.ajax({
+          url: "/get_last_sms",
+          type: "POST",
+          contentType: "application/json",
+          data: JSON.stringify({ port: port }),
+          success: function (response) {
+            console.log(response);
+
+            // Restore button state after operation completes
+            btn.disabled = false;
+            btn.classList.remove("btn-busy");
+            btn.innerHTML = '<i class="fas fa-search"></i> Get SIM Data';
+            showModal(response);
+          },
+          error: function (error) {
+            console.log(error);
+
+            // Restore button state on error
+            btn.disabled = false;
+            btn.classList.remove("btn-busy");
+            btn.innerHTML = '<i class="fas fa-search"></i> Get SIM Data';
+            alert("Error fetching data for port " + port);
+          },
+        });
+      }
+
+      function showModal(data) {
+        var modal = document.getElementById("simModal");
+        var simDetails = document.getElementById("simDetails");
+        var smsTable = `
+    <table>
+      <thead>
+        <tr>
+          <th>Sender</th>
+          <th>SMS</th>
+          <th>Timestamp</th>
+        </tr>
+      </thead>
+      <tbody>`;
+
+        if (data.responses["Get SMS"]) {
+          // Reverse the order of the SMS messages
+          data.responses["Get SMS"].reverse().forEach(function (sms) {
+            smsTable += `
+        <tr>
+          <td>${sms.sender}</td>
+          <td>${sms.message}</td>
+          <td>${sms.timestamp}</td>
+        </tr>`;
+          });
+        } else {
+          smsTable += `<tr><td colspan="3">No SMS found</td></tr>`;
+        }
+
+        smsTable += `</tbody></table>`;
+
+        simDetails.innerHTML = `
+    <h2>SIM Card Data</h2>
+    <p><strong>Port:</strong> ${data.port}</p>
+    <p><strong>ICCID:</strong> ${data.responses.ICCID}</p>
+    <p><strong>MSISDN:</strong> ${data.responses.MSISDN}</p>
+    <h3>Last SMS Messages</h3>
+    ${smsTable}`;
+
+        modal.style.display = "block";
+      }
+
+      function closeModal() {
+        var modal = document.getElementById("simModal");
+        modal.style.display = "none";
+      }
+    </script>
+  </body>
+</html>
