@@ -1,7 +1,7 @@
 [
     {
         "port": "COM12",
-        "timestamp": "2024-09-10T16:23:28.685098",
+        "timestamp": "2024-09-11T10:33:26.969671",
         "responses": {
             "SMS Count": {
                 "used": 0,
@@ -17,56 +17,8 @@
         }
     },
     {
-        "port": "COM8",
-        "timestamp": "2024-09-10T16:23:28.686098",
-        "responses": {
-            "SMS Count": {
-                "used": 0,
-                "total": 30
-            },
-            "Check SIM status": "+CPIN: READY",
-            "Get IMSI": "604016116138920",
-            "Set SMS text mode": "OK",
-            "Get SMS": [],
-            "Get Operator": "IAM\r\n\r\n\r\n+CUSD: 2",
-            "ICCID": 6116138920
-        }
-    },
-    {
-        "port": "COM11",
-        "timestamp": "2024-09-10T16:23:28.687097",
-        "responses": {
-            "SMS Count": {
-                "used": 0,
-                "total": 30
-            },
-            "Check SIM status": "+CPIN: READY",
-            "Get IMSI": "604011624972228",
-            "Set SMS text mode": "OK",
-            "Get SMS": [],
-            "Get Operator": "IAM\r\n\r\n\r\n+CUSD: 2",
-            "ICCID": 1624972228
-        }
-    },
-    {
-        "port": "COM10",
-        "timestamp": "2024-09-10T16:23:28.685098",
-        "responses": {
-            "SMS Count": {
-                "used": 0,
-                "total": 30
-            },
-            "Check SIM status": "+CPIN: READY",
-            "Get IMSI": "604016116144976",
-            "Set SMS text mode": "OK",
-            "Get SMS": [],
-            "Get Operator": "+COPS: 0",
-            "ICCID": 6116144976
-        }
-    },
-    {
         "port": "COM13",
-        "timestamp": "2024-09-10T16:23:28.686098",
+        "timestamp": "2024-09-11T10:33:26.970673",
         "responses": {
             "SMS Count": {
                 "used": 0,
@@ -82,8 +34,73 @@
         }
     },
     {
+        "port": "COM8",
+        "timestamp": "2024-09-11T10:33:26.970673",
+        "responses": {
+            "SMS Count": {
+                "used": 0,
+                "total": 30
+            },
+            "Check SIM status": "+CPIN: READY",
+            "Get IMSI": "604016116138920",
+            "Set SMS text mode": "OK",
+            "Get SMS": [],
+            "Get Operator": "RDY",
+            "ICCID": 6116138920
+        }
+    },
+    {
+        "port": "COM10",
+        "timestamp": "2024-09-11T10:33:26.969671",
+        "responses": {
+            "SMS Count": {
+                "used": 0,
+                "total": 30
+            },
+            "Check SIM status": "+CPIN: READY",
+            "Get IMSI": "604016116144976",
+            "Set SMS text mode": "OK",
+            "Get SMS": [],
+            "Get Operator": "+COPS: 0",
+            "ICCID": 6116144976
+        }
+    },
+    {
+        "port": "COM11",
+        "timestamp": "2024-09-11T10:33:26.971671",
+        "responses": {
+            "SMS Count": {
+                "used": 0,
+                "total": 30
+            },
+            "Check SIM status": "+CPIN: READY",
+            "Get IMSI": "604011624972228",
+            "Set SMS text mode": "OK",
+            "Get SMS": [],
+            "Get Operator": "IAM\r\n\r\n\r\n+CUSD: 4\r\n\r\n+CME ERROR: 100",
+            "ICCID": 1624972228
+        }
+    },
+    {
+        "port": "COM15",
+        "timestamp": "2024-09-11T10:33:30.039284",
+        "responses": {
+            "SMS Count": {
+                "used": 0,
+                "total": 30
+            },
+            "Check SIM status": "+CPIN: READY",
+            "Get IMSI": "604011624960408",
+            "Set SMS text mode": "OK",
+            "Get SMS": [],
+            "MSISDN": "212678307383",
+            "Get Operator": "IAM",
+            "ICCID": 1624960408
+        }
+    },
+    {
         "port": "COM9",
-        "timestamp": "2024-09-10T16:23:30.756174",
+        "timestamp": "2024-09-11T10:33:30.048280",
         "responses": {
             "SMS Count": {
                 "used": 0,
@@ -100,7 +117,7 @@
     },
     {
         "port": "COM3",
-        "timestamp": "2024-09-10T16:23:31.737789",
+        "timestamp": "2024-09-11T10:33:31.522367",
         "responses": {
             "SMS Count": {
                 "used": 0,
@@ -116,42 +133,8 @@
         }
     },
     {
-        "port": "COM15",
-        "timestamp": "2024-09-10T16:23:30.755174",
-        "responses": {
-            "SMS Count": {
-                "used": 0,
-                "total": 30
-            },
-            "Check SIM status": "+CPIN: READY",
-            "Get IMSI": "604011624960408",
-            "Set SMS text mode": "OK",
-            "Get SMS": [],
-            "MSISDN": "212678307383",
-            "Get Operator": "IAM",
-            "ICCID": 1624960408
-        }
-    },
-    {
-        "port": "COM14",
-        "timestamp": "2024-09-10T16:23:48.105372",
-        "responses": {
-            "SMS Count": {
-                "used": 0,
-                "total": 30
-            },
-            "Check SIM status": "+CPIN: READY",
-            "Get IMSI": "604016256175029",
-            "Set SMS text mode": "OK",
-            "Get SMS": [],
-            "MSISDN": "212766977242",
-            "Get Operator": "IAM",
-            "ICCID": 6256175029
-        }
-    },
-    {
         "port": "COM6",
-        "timestamp": "2024-09-10T16:23:48.002715",
+        "timestamp": "2024-09-11T10:33:55.782372",
         "responses": {
             "SMS Count": {
                 "used": 0,
@@ -167,21 +150,25 @@
         }
     },
     {
-        "port": "COM7",
-        "timestamp": "2024-09-10T16:24:34.360435",
+        "port": "COM14",
+        "timestamp": "2024-09-11T10:33:55.855138",
         "responses": {
-            "Get SMS": [
-                {
-                    "sender": "Google",
-                    "timestamp": "2024/09/10 16:22:24+04",
-                    "message": "G-022643 is your Google verification code."
-                }
-            ]
+            "SMS Count": {
+                "used": 0,
+                "total": 30
+            },
+            "Check SIM status": "+CPIN: READY",
+            "Get IMSI": "604016256175029",
+            "Set SMS text mode": "OK",
+            "Get SMS": [],
+            "MSISDN": "212766977242",
+            "Get Operator": "IAM",
+            "ICCID": 6256175029
         }
     },
     {
         "port": "COM4",
-        "timestamp": "2024-09-10T16:23:48.990904",
+        "timestamp": "2024-09-11T10:33:57.271477",
         "responses": {
             "SMS Count": {
                 "used": 0,

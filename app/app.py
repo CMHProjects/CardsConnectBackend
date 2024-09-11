@@ -5,6 +5,7 @@ import os
 import json
 import subprocess
 import time
+import pandas as pd
 
 app = Flask(__name__)
 CORS(app)
@@ -189,17 +190,16 @@ def bulk_add_sim():
     if file.filename == '':
         return jsonify({'error': 'No selected file'}), 400
     
-    if not file.filename.endswith(('.csv', '.xlsx')):
+    if file and file.filename and not file.filename.endswith(('.csv', '.xlsx')):
         return jsonify({'error': 'Invalid file format'}), 400
     
     try:
-        import pandas as pd
-        import sqlite3
+
         
         # Detect CSV or XLSX and process accordingly
-        if file.filename.endswith('.csv'):
+        if file and file.filename and file.filename.endswith('.csv'):
             df = pd.read_csv(file, delimiter=';')
-        elif file.filename.endswith('.xlsx'):
+        elif file and file.filename and file.filename.endswith('.xlsx'):
             df = pd.read_excel(file)
         
         # Connect to the SQLite database

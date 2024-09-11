@@ -13,7 +13,7 @@ conn = sqlite3.connect(db_file)
 cursor = conn.cursor()
 
 # Function to send AT commands to a port and read the response
-def send_at_command(port, baud_rate, command, timeout=1):
+def send_at_command(port, baud_rate, command, timeout=1.5):
     try:
         with serial.Serial(port, baud_rate, timeout=timeout) as ser:
             ser.write(command)
