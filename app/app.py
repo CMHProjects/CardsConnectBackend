@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, redirect
 from flask_cors import CORS
 import sqlite3
 import os
@@ -8,7 +8,8 @@ import time
 import pandas as pd
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
+
 
 json_file = 'sim_data.json'
 main_script = 'app/main.py'
@@ -247,6 +248,13 @@ def bulk_add_sim():
     finally:
         if conn:
             conn.close()
+
+
+@app.route('/api/contact_developer')
+def contact_developer():
+    telegram_username = "Nourdev97"
+    telegram_desktop_url = f"tg://resolve?domain={telegram_username}"
+    return jsonify({'url': telegram_desktop_url})
 
 
 if __name__ == '__main__':
