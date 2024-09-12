@@ -7,12 +7,10 @@ import csv
 import concurrent.futures
 import sqlite3
 
-# Database connection
-db_file = 'data/sim_cards.db'  # Adjust as per your database file location
+
+db_file = 'data/sim_cards.db'
 conn = sqlite3.connect(db_file)
 cursor = conn.cursor()
-
-# Function to send AT commands to a port and read the response
 
 
 def send_at_command(port, baud_rate, command, timeout=1.5):
@@ -25,14 +23,11 @@ def send_at_command(port, baud_rate, command, timeout=1.5):
         print(f"Error communicating with port {port}: {e}")
         return None
 
-# Function to detect available ports
-
 
 def detect_ports():
     return [port.device for port in serial.tools.list_ports.comports()]
 
 
-# Function to extract phone number from AT+CUSD response
 def extract_phone_number(response):
     try:
         response_str = response.decode('utf-8')
@@ -44,29 +39,24 @@ def extract_phone_number(response):
         print(f"Error extracting phone number: {e}")
     return None
 
-# Function to extract ICCID from a raw response
-
 
 def extract_iccid(response):
     try:
         parts = response.split(',')
         if len(parts) >= 3:
             iccid_with_quotes = parts[2]
-            iccid = iccid_with_quotes.strip('"')[8:-2]  # Extract ICCID
+            iccid = iccid_with_quotes.strip('"')[8:-2]
             cleaned_iccid = ''.join(c for c in iccid if c.isdigit())[:10]
 
-            # Rearrange ICCID 2 by 2
             rearranged_iccid = ''.join(
                 cleaned_iccid[i:i+2][::-1] for i in range(0, len(cleaned_iccid), 2))
 
-            return int(rearranged_iccid)  # Return ICCID as integer
+            return int(rearranged_iccid)
     except (IndexError, ValueError) as e:
         print(f"Error parsing ICCID response: {e}")
     except Exception as e:
         print(f"Error rearranging ICCID: {e}")
     return None
-
-# Function to decode an SMS message from a hexadecimal string
 
 
 def decode_sms(hex_string):
@@ -79,8 +69,6 @@ def decode_sms(hex_string):
     except (UnicodeDecodeError, ValueError) as e:
         print(f"Error decoding SMS: {e}")
         return None
-
-# Function to load ICCID and PIN data from a CSV file with semicolon delimiter
 
 
 def load_iccid_pin_data():
@@ -98,7 +86,7 @@ def load_iccid_pin_data():
 
 
 def delete_all_sms(port, baud_rate):
-    command = b'AT+CMGD=1,4\r'  # This command deletes all SMS from SIM storage
+    command = b'AT+CMGD=1,4\r'
     response = send_at_command(port, baud_rate, command)
     if response and b'OK' in response:
         print(f"All SMS deleted from SIM on port {port}")
@@ -107,16 +95,14 @@ def delete_all_sms(port, baud_rate):
         print(f"Failed to delete SMS from SIM on port {port}")
         return False
 
-# Function to count SMS stored in SIM
-
 
 def count_sms_in_sim(port, baud_rate):
-    command = b'AT+CPMS="SM"\r'  # Select SIM storage to read SMS count
+    command = b'AT+CPMS="SM"\r'
     response = send_at_command(port, baud_rate, command)
     try:
         if response:
             response_str = response.decode('utf-8')
-            # Parse response like +CPMS: <used>,<total>,<used>,<total>,<used>,<total>
+
             parts = response_str.split(',')
             used_sms = int(parts[0].split(':')[1].strip())
             total_sms = int(parts[1].strip())
@@ -124,8 +110,6 @@ def count_sms_in_sim(port, baud_rate):
     except (ValueError, IndexError, UnicodeDecodeError) as e:
         print(f"Error parsing SMS count response on port {port}: {e}")
     return None, None
-
-# Function to check and unlock SIM card if needed
 
 
 def check_and_unlock_sim(port, baud_rate, iccid_pin_data):
@@ -153,7 +137,7 @@ def check_and_unlock_sim(port, baud_rate, iccid_pin_data):
                 print(f"Extracted ICCID on port {port}: {extracted_iccid}")
 
                 if extracted_iccid:
-                    decoded_iccid = extracted_iccid  # Use extracted ICCID for processing
+                    decoded_iccid = extracted_iccid
 
                     if decoded_iccid in iccid_pin_data:
                         pin = iccid_pin_data[decoded_iccid]
@@ -189,12 +173,11 @@ def check_and_unlock_sim(port, baud_rate, iccid_pin_data):
 
     return False
 
-# Function to process a single SIM card
-# Function to process a single SIM card
-# Send all commands for a full scan, or just "Get SMS" when a specific port is provided
-
 
 def process_single_sim_card(port, baud_rate, iccid_pin_data, full_scan=True):
+
+    timeout = 1.5 if full_scan else 0.08
+
     port_data = {"port": port, "timestamp": datetime.now().isoformat(),
                  "responses": {}}
 
@@ -205,7 +188,7 @@ def process_single_sim_card(port, baud_rate, iccid_pin_data, full_scan=True):
         return None
 
     if full_scan:
-        # Full scan: Send all commands
+
         commands = {
             "Check SIM status": b'AT+CPIN?\r',
             "Get IMSI": b'AT+CIMI\r',
@@ -217,12 +200,11 @@ def process_single_sim_card(port, baud_rate, iccid_pin_data, full_scan=True):
             "Get ICCID": b'AT+CRSM=176,12258,0,0,10\r',
         }
     else:
-        # Fast scan: Only send "Get SMS" command
+
         commands = {
             "Get SMS": b'AT+CMGL="ALL"\r'
         }
 
-    # Count SMS if it's a full scan
     if full_scan:
         used_sms, total_sms = count_sms_in_sim(port, baud_rate)
         if used_sms is not None and total_sms is not None:
@@ -231,7 +213,8 @@ def process_single_sim_card(port, baud_rate, iccid_pin_data, full_scan=True):
 
     for desc, command in commands.items():
         print(f"  Sending command: {desc}")
-        response = send_at_command(port, baud_rate, command)
+
+        response = send_at_command(port, baud_rate, command, timeout=timeout)
 
         if response:
             print(f"  Received raw response on port {port}: {response}")
@@ -239,7 +222,7 @@ def process_single_sim_card(port, baud_rate, iccid_pin_data, full_scan=True):
                 decoded_response = response.decode(
                     'utf-8').strip().replace('\r\nOK', '')
                 decoded_response = decoded_response.rstrip(
-                    '\r\n')  # Remove trailing \r\n
+                    '\r\n')
 
                 if desc == "Get SMS":
                     sms_texts = []
@@ -320,8 +303,6 @@ def process_single_sim_card(port, baud_rate, iccid_pin_data, full_scan=True):
 
     return port_data
 
-# Main function to process SIM cards, with the option for a full scan or fast scan (just SMS) on a specific port
-
 
 def process_sim_cards(port=None, delete_sms=False):
     baud_rate = 115200
@@ -329,11 +310,10 @@ def process_sim_cards(port=None, delete_sms=False):
     iccid_pin_data = load_iccid_pin_data()
     data = []
 
-    # If a specific port is provided, do a fast scan; otherwise, do a full scan
     full_scan = not port
 
     if port:
-        active_ports = [port]  # Process only the specified port if provided
+        active_ports = [port]
 
     with concurrent.futures.ThreadPoolExecutor() as executor:
         futures = {executor.submit(process_single_sim_card, port, baud_rate,
@@ -352,8 +332,6 @@ def process_sim_cards(port=None, delete_sms=False):
 
     print(f"Data saved to {output_file}")
 
-# Function to parse command-line arguments
-
 
 def parse_arguments():
     parser = argparse.ArgumentParser(
@@ -364,7 +342,6 @@ def parse_arguments():
     return parser.parse_args()
 
 
-# Execute the main function with optional port argument
 if __name__ == "__main__":
     args = parse_arguments()
     if args.port:
