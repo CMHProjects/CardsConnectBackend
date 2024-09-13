@@ -216,7 +216,7 @@ def bulk_add_sim():
 
         # Detect CSV or XLSX and process accordingly
         if file and file.filename and file.filename.endswith('.csv'):
-            df = pd.read_csv(file, delimiter=';')
+            df = pd.read_csv(file.stream, delimiter=';')
         elif file and file.filename and file.filename.endswith('.xlsx'):
             df = pd.read_excel(file)
 
@@ -235,7 +235,7 @@ def bulk_add_sim():
                     'INSERT OR IGNORE INTO sim_cards (iccid, pin) VALUES (?, ?)', (iccid, pin))
             except ValueError:
                 # Handle non-numeric values for ICCID or PIN
-                return jsonify({'error': f'Invalid ICCID or PIN value at row {_ + 1}'}), 400
+                return jsonify({'error': f'Invalid ICCID or PIN value at row {_ + 1}'}), 400 # type: ignore
 
         # Commit the transaction
         conn.commit()

@@ -176,16 +176,17 @@ def check_and_unlock_sim(port, baud_rate, iccid_pin_data):
 
 def process_single_sim_card(port, baud_rate, iccid_pin_data, full_scan=True):
 
-    timeout = 1.5 if full_scan else 0.08
+    timeout = 1.5 if full_scan else 0.05
 
     port_data = {"port": port, "timestamp": datetime.now().isoformat(),
                  "responses": {}}
 
     print(f"Checking SIM card on port {port}...")
 
-    if not check_and_unlock_sim(port, baud_rate, iccid_pin_data):
-        print(f"Skipping port {port} due to SIM status issues.")
-        return None
+    if full_scan:
+        if not check_and_unlock_sim(port, baud_rate, iccid_pin_data):
+            print(f"Skipping port {port} due to SIM status issues.")
+            return None
 
     if full_scan:
 
@@ -200,7 +201,6 @@ def process_single_sim_card(port, baud_rate, iccid_pin_data, full_scan=True):
             "Get ICCID": b'AT+CRSM=176,12258,0,0,10\r',
         }
     else:
-
         commands = {
             "Get SMS": b'AT+CMGL="ALL"\r'
         }
