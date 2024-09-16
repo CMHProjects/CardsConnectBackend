@@ -15,8 +15,6 @@ json_file = 'sim_data.json'
 main_script = 'app/main.py'
 db_file = 'data/sim_cards.db'
 
-# Ensure the database table exists
-
 
 def initialize_database():
     try:
@@ -65,7 +63,7 @@ def load_iccid_pin_data():
         cursor.execute("SELECT iccid, pin FROM sim_cards")
         rows = cursor.fetchall()
         for row in rows:
-            iccid = str(row[0])  # ICCID is stored as a string
+            iccid = str(row[0])
             pin = row[1]
             iccid_pin_data[iccid] = pin
     except sqlite3.Error as e:
@@ -80,10 +78,9 @@ def load_iccid_pin_data():
 @app.route('/api/run_main_and_get_data')
 def run_main_and_get_data():
     """Run the main script and fetch SIM data dynamically."""
-    # Fetch fresh ICCID and PIN data from the database
+
     iccid_pin_data = load_iccid_pin_data()
 
-    # Call the main script, which uses the ICCID and PIN data
     if is_json_empty_or_not_exist():
         try:
             subprocess.run(['python', main_script], check=True)
@@ -95,15 +92,13 @@ def run_main_and_get_data():
 
     sim_data = load_json_data()
 
-    # Unlock SIMs using the freshly loaded ICCID and PIN data
     for sim in sim_data:
         port = sim.get('port')
-        # Assuming you have the logic to process the sim and unlock it using the ICCID and PIN
+
         if port and port in iccid_pin_data:
-            # Example unlock logic: Replace with actual function to unlock SIM
+
             print(f"Unlocking SIM on port {port} with ICCID {
                   sim['iccid']} using PIN.")
-            # unlock_sim(port, iccid_pin_data[sim['iccid']])
 
     return jsonify(sim_data)
 
@@ -122,7 +117,7 @@ def delete_sms():
     if not port:
         return jsonify({'error': 'Port not specified'}), 400
     try:
-        # Ensure --delete-sms is passed correctly
+
         result = subprocess.run(
             ['python', main_script, '--port', port, '--delete-sms'],
             capture_output=True, text=True, check=True
@@ -157,7 +152,7 @@ def get_last_sms():
     port = data.get('port')
     sim_data = load_json_data()
     try:
-        # Run only for a specific port
+
         subprocess.run(['python', main_script, '--port', port], check=True)
     except subprocess.CalledProcessError as e:
         return jsonify({'error': f'Error running {main_script} for port {port}: {e}'}), 500
@@ -214,30 +209,26 @@ def bulk_add_sim():
 
     try:
 
-        # Detect CSV or XLSX and process accordingly
         if file and file.filename and file.filename.endswith('.csv'):
             df = pd.read_csv(file.stream, delimiter=';')
         elif file and file.filename and file.filename.endswith('.xlsx'):
             df = pd.read_excel(file)
 
-        # Connect to the SQLite database
         conn = sqlite3.connect(db_file)
         cursor = conn.cursor()
 
         for _, row in df.iterrows():
             try:
-                # Ensure ICCID and PIN are valid integers
+
                 iccid = int(row['ICCID'])
                 pin = int(row['PIN'])
 
-                # Insert SIM card data into the database
                 cursor.execute(
                     'INSERT OR IGNORE INTO sim_cards (iccid, pin) VALUES (?, ?)', (iccid, pin))
             except ValueError:
-                # Handle non-numeric values for ICCID or PIN
+
                 return jsonify({'error': f'Invalid ICCID or PIN value at row {_ + 1}'}), 400 # type: ignore
 
-        # Commit the transaction
         conn.commit()
 
         return jsonify({'message': 'Bulk SIM cards added successfully.'})

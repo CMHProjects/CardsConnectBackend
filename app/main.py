@@ -3,7 +3,6 @@ import serial.tools.list_ports
 import serial
 import json
 from datetime import datetime
-import csv
 import concurrent.futures
 import sqlite3
 
@@ -174,15 +173,13 @@ def check_and_unlock_sim(port, baud_rate, iccid_pin_data):
     return False
 
 
-
 def process_single_sim_card(port, baud_rate, iccid_pin_data, full_scan=True):
-    # Define command-specific timeouts
+
     command_timeouts = {
-        "Set Phonebook Storage to MSISDN": 2.5
+        "Set Phonebook Storage to MSISDN": 1.5
     }
-    
-    # Default timeout for commands
-    default_timeout = 0.08
+
+    default_timeout = 0.1
 
     port_data = {"port": port, "timestamp": datetime.now().isoformat(),
                  "responses": {}}
@@ -217,7 +214,7 @@ def process_single_sim_card(port, baud_rate, iccid_pin_data, full_scan=True):
                 "used": used_sms, "total": total_sms}
 
     for desc, command in commands.items():
-        # Determine the timeout for the current command
+
         timeout = command_timeouts.get(desc, default_timeout)
         print(f"  Sending command: {desc} (timeout: {timeout})")
 
@@ -256,7 +253,8 @@ def process_single_sim_card(port, baud_rate, iccid_pin_data, full_scan=True):
                     port_data["responses"][desc] = sms_texts
 
                 else:
-                    port_data["responses"][desc] = decoded_response.split('\r\n')[0]
+                    port_data["responses"][desc] = decoded_response.split('\r\n')[
+                        0]
 
                 if desc == "Get ICCID":
                     extracted_iccid = extract_iccid(decoded_response)
@@ -291,9 +289,11 @@ def process_single_sim_card(port, baud_rate, iccid_pin_data, full_scan=True):
             except UnicodeDecodeError as e:
                 hex_response = response.hex()
                 port_data["responses"][desc] = hex_response
-                print(f"  Could not decode response on port {port}. Hex: {hex_response}. Error: {e}")
+                print(f"  Could not decode response on port {
+                      port}. Hex: {hex_response}. Error: {e}")
             except IndexError as e:
-                print(f"  Error processing response on port {port}: IndexError - {e}")
+                print(f"  Error processing response on port {
+                      port}: IndexError - {e}")
         else:
             port_data["responses"][desc] = None
             print(f"  No response received on port {port}")
@@ -306,6 +306,7 @@ def process_single_sim_card(port, baud_rate, iccid_pin_data, full_scan=True):
         del port_data["responses"]["Send USSD"]
 
     return port_data
+
 
 def process_sim_cards(port=None, delete_sms=False):
     baud_rate = 115200
@@ -336,11 +337,15 @@ def process_sim_cards(port=None, delete_sms=False):
 
     print(f"Data saved to {output_file}")
 
+
 def parse_arguments():
-    parser = argparse.ArgumentParser(description='Process SIM cards on specified port')
+    parser = argparse.ArgumentParser(
+        description='Process SIM cards on specified port')
     parser.add_argument('--port', type=str, help='Specify a port to process')
-    parser.add_argument('--delete-sms', action='store_true', help='Delete all SMS messages from SIM storage')
+    parser.add_argument('--delete-sms', action='store_true',
+                        help='Delete all SMS messages from SIM storage')
     return parser.parse_args()
+
 
 if __name__ == "__main__":
     args = parse_arguments()
