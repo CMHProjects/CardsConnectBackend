@@ -12,7 +12,7 @@ conn = sqlite3.connect(db_file)
 cursor = conn.cursor()
 
 
-def send_at_command(port, baud_rate, command, timeout=1.5):
+def send_at_command(port, baud_rate, command, timeout=1.7):
     try:
         with serial.Serial(port, baud_rate, timeout=timeout) as ser:
             ser.write(command)
@@ -147,7 +147,19 @@ def check_and_unlock_sim(port, baud_rate, iccid_pin_data):
                         if unlock_response and b'OK' in unlock_response:
                             print(f"SIM card on port {
                                   port} unlocked successfully.")
-                            return True
+
+                            disable_pin_command = f'AT+CLCK="SC",0,"{
+                                pin}"\r'.encode('utf-8')
+                            disable_pin_response = send_at_command(
+                                port, baud_rate, disable_pin_command)
+
+                            if disable_pin_response and b'OK' in disable_pin_response:
+                                print(f"PIN lock on SIM card at port {
+                                      port} has been disabled.")
+                                return True
+                            else:
+                                print(
+                                    f"Failed to disable PIN lock on SIM card at port {port}")
                         else:
                             print(f"Failed to unlock SIM card on port {port}")
                     else:
@@ -176,10 +188,10 @@ def check_and_unlock_sim(port, baud_rate, iccid_pin_data):
 def process_single_sim_card(port, baud_rate, iccid_pin_data, full_scan=True):
 
     command_timeouts = {
-        "Set Phonebook Storage to MSISDN": 1.5
+        "Set Phonebook Storage to MSISDN": 1.7
     }
 
-    default_timeout = 0.1
+    default_timeout = 0.08
 
     port_data = {"port": port, "timestamp": datetime.now().isoformat(),
                  "responses": {}}
