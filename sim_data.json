@@ -1,33 +1,23 @@
 [
     {
-        "port": "COM39",
-        "timestamp": "2024-09-17T16:25:48.294570",
+        "port": "COM42",
+        "timestamp": "2024-09-19T15:55:13.398563",
         "responses": {
-            "Get SMS": [
-                {
-                    "sender": "Google",
-                    "timestamp": "2024/09/12 16:46:19+04",
-                    "message": "G-357667 : votre code de validation Google"
-                }
-            ]
-        }
-    },
-    {
-        "port": "COM37",
-        "timestamp": "2024-09-17T16:25:44.992577",
-        "responses": {
-            "Get SMS": [
-                {
-                    "sender": "Google",
-                    "timestamp": "2024/09/16 13:02:41+04",
-                    "message": "G-209757 is your Google verification code."
-                }
-            ]
+            "SMS Count": {
+                "used": 0,
+                "total": 30
+            },
+            "Check SIM status": "+CPIN: READY",
+            "Get IMSI": "604016116144976",
+            "Set SMS text mode": "OK",
+            "Get SMS": [],
+            "Get Operator": "+COPS: 0",
+            "ICCID": 6116144976
         }
     },
     {
         "port": "COM35",
-        "timestamp": "2024-09-17T16:20:28.417759",
+        "timestamp": "2024-09-19T16:03:11.280788",
         "responses": {
             "Get SMS": [
                 {
@@ -39,45 +29,79 @@
         }
     },
     {
-        "port": "COM41",
-        "timestamp": "2024-09-17T16:25:49.999397",
+        "port": "COM39",
+        "timestamp": "2024-09-19T15:55:11.669938",
         "responses": {
+            "SMS Count": {
+                "used": 1,
+                "total": 30
+            },
+            "Check SIM status": "+CPIN: READY",
+            "Get IMSI": "604011356461207",
+            "Set SMS text mode": "OK",
+            "Get SMS": [
+                {
+                    "sender": "Google",
+                    "timestamp": "2024/09/12 16:46:19+04",
+                    "message": "G-357667 : votre code de validation Google"
+                }
+            ],
+            "MSISDN": "212613472504",
+            "Get Operator": "IAM",
+            "ICCID": 1356461207
+        }
+    },
+    {
+        "port": "COM38",
+        "timestamp": "2024-09-19T15:55:11.668938",
+        "responses": {
+            "SMS Count": {
+                "used": 0,
+                "total": 30
+            },
+            "Check SIM status": "+CPIN: READY",
+            "Get IMSI": "604011624971766",
+            "Set SMS text mode": "OK",
+            "Get SMS": [],
+            "MSISDN": "212678388675",
+            "Get Operator": "IAM",
+            "ICCID": 1624971766
+        }
+    },
+    {
+        "port": "COM41",
+        "timestamp": "2024-09-19T15:55:11.670937",
+        "responses": {
+            "SMS Count": {
+                "used": 1,
+                "total": 30
+            },
+            "Check SIM status": "+CPIN: READY",
+            "Get IMSI": "604011624960488",
+            "Set SMS text mode": "OK",
             "Get SMS": [
                 {
                     "sender": "Google",
                     "timestamp": "2024/09/12 16:47:45+04",
                     "message": "G-077918 : votre code de validation Google"
                 }
-            ]
-        }
-    },
-    {
-        "port": "COM38",
-        "timestamp": "2024-09-17T16:20:31.500534",
-        "responses": {
-            "Get SMS": [
-                {
-                    "sender": "Google",
-                    "timestamp": "2024/09/12 09:37:08+04",
-                    "message": "G-867670 is your Google verification code."
-                },
-                {
-                    "sender": "+212603968251",
-                    "timestamp": "2024/09/16 11:16:18+04",
-                    "message": "Test timestamp bug"
-                },
-                {
-                    "sender": "IAM",
-                    "timestamp": "2024/09/16 11:32:45+04",
-                    "message": "\u00d8\u00a7\u00d8\u00aa\u00d8\u00b5\u00d8\u00a7\u00d9\u201e\u00d8\u00a7\u00d8\u00aa \u00d8\u00a7\u00d9\u201e\u00d9\u2026\u00d8\u00ba\u00d8\u00b1\u00d8\u00a8 \u00d8\u00aa\u00d8\u00aa\u00d9\u2026\u00d9\u2020\u00d9\u2030 \u00d9\u201e\u00d9\u0192\u00d9\u2026 \u00d8\u00b9\u00d9\u0160\u00d8\u00af\u00d8\u00a7 \u00d9\u2026\u00d8\u00a8\u00d8\u00a7\u00d8\u00b1\u00d9\u0192\u00d8\u00a7 \u00d8\u00b3\u00d8\u00b9\u00d9\u0160\u00d8\u00af\u00d8\u00a7"
-                }
-            ]
+            ],
+            "MSISDN": "212678309774",
+            "Get Operator": "IAM",
+            "ICCID": 1624960488
         }
     },
     {
         "port": "COM40",
-        "timestamp": "2024-09-17T16:25:49.034910",
+        "timestamp": "2024-09-19T15:55:11.669938",
         "responses": {
+            "SMS Count": {
+                "used": 2,
+                "total": 30
+            },
+            "Check SIM status": "+CPIN: READY",
+            "Get IMSI": "604016116138920",
+            "Set SMS text mode": "OK",
             "Get SMS": [
                 {
                     "sender": "Google",
@@ -89,20 +113,46 @@
                     "timestamp": "2024/09/16 10:26:21+04",
                     "message": "G-455065 is your Google verification code."
                 }
-            ]
+            ],
+            "MSISDN": "212637659236",
+            "Get Operator": "IAM",
+            "ICCID": 6116138920
         }
     },
     {
-        "port": "COM42",
-        "timestamp": "2024-09-17T16:20:35.766868",
+        "port": "COM37",
+        "timestamp": "2024-09-19T15:55:11.667938",
         "responses": {
-            "Get SMS": []
+            "SMS Count": {
+                "used": 1,
+                "total": 30
+            },
+            "Check SIM status": "+CPIN: READY",
+            "Get IMSI": "604011624974939",
+            "Set SMS text mode": "OK",
+            "Get SMS": [
+                {
+                    "sender": "Google",
+                    "timestamp": "2024/09/16 13:02:41+04",
+                    "message": "G-209757 is your Google verification code."
+                }
+            ],
+            "MSISDN": "212678067354",
+            "Get Operator": "IAM",
+            "ICCID": 1624974939
         }
     },
     {
         "port": "COM43",
-        "timestamp": "2024-09-17T16:25:50.530465",
+        "timestamp": "2024-09-19T15:55:15.102635",
         "responses": {
+            "SMS Count": {
+                "used": 4,
+                "total": 30
+            },
+            "Check SIM status": "+CPIN: READY",
+            "Get IMSI": "604011624960592",
+            "Set SMS text mode": "OK",
             "Get SMS": [
                 {
                     "sender": "Google",
@@ -124,47 +174,90 @@
                     "timestamp": "2024/09/12 11:50:23+04",
                     "message": "G-557703 : votre code de validation Google"
                 }
-            ]
+            ],
+            "MSISDN": "212678312411",
+            "Get Operator": "IAM",
+            "ICCID": 1624960592
+        }
+    },
+    {
+        "port": "COM44",
+        "timestamp": "2024-09-19T15:55:24.880836",
+        "responses": {
+            "SMS Count": {
+                "used": 0,
+                "total": 30
+            },
+            "Check SIM status": "+CPIN: READY",
+            "Get IMSI": "604016256175029",
+            "Set SMS text mode": "OK",
+            "Get SMS": [],
+            "MSISDN": "212766977242",
+            "Get Operator": "IAM",
+            "ICCID": 6256175029
         }
     },
     {
         "port": "COM45",
-        "timestamp": "2024-09-17T16:20:40.034715",
+        "timestamp": "2024-09-19T15:55:24.896827",
         "responses": {
-            "Get SMS": []
+            "SMS Count": {
+                "used": 0,
+                "total": 30
+            },
+            "Check SIM status": "+CPIN: READY",
+            "Get IMSI": "604011624972228",
+            "Set SMS text mode": "OK",
+            "Get SMS": [],
+            "MSISDN": "212678397030",
+            "Get Operator": "IAM",
+            "ICCID": 1624972228
         }
     },
     {
         "port": "COM46",
-        "timestamp": "2024-09-17T16:25:53.412770",
+        "timestamp": "2024-09-19T15:55:24.928810",
         "responses": {
+            "SMS Count": {
+                "used": 1,
+                "total": 30
+            },
+            "Check SIM status": "+CPIN: READY",
+            "Get IMSI": "604016116138852",
+            "Set SMS text mode": "OK",
             "Get SMS": [
                 {
                     "sender": "Google",
                     "timestamp": "2024/09/12 10:21:21+04",
                     "message": "G-225999 is your Google verification code."
                 }
-            ]
+            ],
+            "MSISDN": "212637697216",
+            "Get Operator": "IAM",
+            "ICCID": 6116138852
         }
     },
     {
         "port": "COM47",
-        "timestamp": "2024-09-17T16:25:53.950298",
+        "timestamp": "2024-09-19T15:55:25.033145",
         "responses": {
+            "SMS Count": {
+                "used": 1,
+                "total": 30
+            },
+            "Check SIM status": "+CPIN: READY",
+            "Get IMSI": "604011624960408",
+            "Set SMS text mode": "OK",
             "Get SMS": [
                 {
                     "sender": "Google",
                     "timestamp": "2024/09/12 12:03:12+04",
                     "message": "G-470499 : votre code de validation Google"
                 }
-            ]
-        }
-    },
-    {
-        "port": "COM44",
-        "timestamp": "2024-09-17T16:20:38.697039",
-        "responses": {
-            "Get SMS": []
+            ],
+            "MSISDN": "212678307383",
+            "Get Operator": "IAM",
+            "ICCID": 1624960408
         }
     }
 ]

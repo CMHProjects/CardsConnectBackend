@@ -16,6 +16,7 @@ main_script = 'app/main.py'
 db_file = 'data/sim_cards.db'
 
 
+# Function to initialize the SQLite database
 def initialize_database():
     try:
         conn = sqlite3.connect(db_file)
@@ -45,13 +46,20 @@ def is_json_empty_or_not_exist():
 def load_json_data():
     if is_json_empty_or_not_exist():
         return []
-    with open(json_file, 'r') as f:
-        return json.load(f)
+    try:
+        with open(json_file, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except (json.JSONDecodeError, IOError) as e:
+        print(f"Error loading JSON data: {e}")
+        return []
 
 
 def save_json_data(data):
-    with open(json_file, 'w') as f:
-        json.dump(data, f, indent=4)
+    try:
+        with open(json_file, 'w', encoding='utf-8') as f:
+            json.dump(data, f, indent=4)
+    except IOError as e:
+        print(f"Error saving JSON data: {e}")
 
 
 def load_iccid_pin_data():
