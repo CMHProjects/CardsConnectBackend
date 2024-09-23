@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, redirect
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 import sqlite3
 import os
@@ -10,15 +10,21 @@ import pandas as pd
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
-
+# Dynamically set paths relative to the current file location
+base_dir = os.path.dirname(os.path.abspath(__file__))
 json_file = 'sim_data.json'
-main_script = 'app/main.py'
-db_file = 'data/sim_cards.db'
+main_script = os.path.join(base_dir, 'main.py')
+db_file = os.path.join(base_dir, '../data/sim_cards.db')
+
+# Function to initialize the SQLite database
 
 
 # Function to initialize the SQLite database
 def initialize_database():
     try:
+        # Ensure directory for database exists
+        os.makedirs(os.path.dirname(db_file), exist_ok=True)
+        
         conn = sqlite3.connect(db_file)
         cursor = conn.cursor()
         cursor.execute('''
@@ -35,8 +41,9 @@ def initialize_database():
         if conn:
             conn.close()
 
-
+# Call to initialize the database
 initialize_database()
+
 
 
 def is_json_empty_or_not_exist():
@@ -86,7 +93,6 @@ def load_iccid_pin_data():
 @app.route('/api/run_main_and_get_data')
 def run_main_and_get_data():
     """Run the main script and fetch SIM data dynamically."""
-
     iccid_pin_data = load_iccid_pin_data()
 
     if is_json_empty_or_not_exist():
@@ -102,9 +108,7 @@ def run_main_and_get_data():
 
     for sim in sim_data:
         port = sim.get('port')
-
         if port and port in iccid_pin_data:
-
             print(f"Unlocking SIM on port {port} with ICCID {
                   sim['iccid']} using PIN.")
 
@@ -125,7 +129,6 @@ def delete_sms():
     if not port:
         return jsonify({'error': 'Port not specified'}), 400
     try:
-
         result = subprocess.run(
             ['python', main_script, '--port', port, '--delete-sms'],
             capture_output=True, text=True, check=True
@@ -160,7 +163,6 @@ def get_last_sms():
     port = data.get('port')
     sim_data = load_json_data()
     try:
-
         subprocess.run(['python', main_script, '--port', port], check=True)
     except subprocess.CalledProcessError as e:
         return jsonify({'error': f'Error running {main_script} for port {port}: {e}'}), 500
@@ -216,7 +218,6 @@ def bulk_add_sim():
         return jsonify({'error': 'Invalid file format'}), 400
 
     try:
-
         if file and file.filename and file.filename.endswith('.csv'):
             df = pd.read_csv(file.stream, delimiter=';')
         elif file and file.filename and file.filename.endswith('.xlsx'):
@@ -227,23 +228,19 @@ def bulk_add_sim():
 
         for _, row in df.iterrows():
             try:
-
                 iccid = int(row['ICCID'])
                 pin = int(row['PIN'])
-
                 cursor.execute(
                     'INSERT OR IGNORE INTO sim_cards (iccid, pin) VALUES (?, ?)', (iccid, pin))
             except ValueError:
-
+                # type: ignore
                 return jsonify({'error': f'Invalid ICCID or PIN value at row {_ + 1}'}), 400 # type: ignore
 
         conn.commit()
-
         return jsonify({'message': 'Bulk SIM cards added successfully.'})
 
     except Exception as e:
         return jsonify({'error': f'Error processing file: {str(e)}'}), 500
-
     finally:
         if conn:
             conn.close()
